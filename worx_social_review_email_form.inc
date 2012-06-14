@@ -79,19 +79,45 @@ function worx_social_review_email_form() {
  * Define the function worx_social_review_email_form_submit.
  */
 function worx_social_review_email_form_submit($form, $form_state) {
-  $params['subject'] = $form_state['values']['email_subject'];
+  $params = array();
+  $params['body'] = $form_state['values']['email_body']['value'];
   $from = $form_state['values']['email_from'];
   $to = $form_state['values']['email_to'];
-  $params['body'] = $form_state['values']['email_body']['value'];
-    
-  $params['google'] = variable_get('worx_social_review_google_link', '') ? variable_get('worx_social_review_google_link', '') : 'Error: No link. Please contact site administrator';
-  $params['yahoo'] = variable_get('worx_social_review_yahoo_link', '') ? variable_get('worx_social_review_yahoo_link', '') : 'Error: No link. Please contact site administrator';
-  $params['bing'] = variable_get('worx_social_review_bing_link', '') ? variable_get('worx_social_review_bing_link', '') : 'Error: No link. Please contact site administrator';
-  $params['yp'] = variable_get('worx_social_review_yp_link', '') ? variable_get('worx_social_review_yp_link', '') : 'Error: No link. Please contact site administrator';
-  $params['foursquare'] = variable_get('worx_social_review_foursquare_link', '') ? variable_get('worx_social_review_foursquare_link', '') : 'Error: No link. Please contact site administrator';
-  $params['urbanspoon'] = variable_get('worx_social_review_urban_spoon_link', '') ? variable_get('worx_social_review_urban_spoon_link', '') : 'Error: No link. Please contact site administrator';
-  $params['ta'] = variable_get('worx_social_review_ta_link', '') ? variable_get('worx_social_review_ta_link', '') : 'Error: No link. Please contact site administrator';
-    
-  drupal_mail('worx_social_review', 'social_review', $to, $language = 'UND', $params, $from);
+  $body = str_replace(
+    $search = array(
+      '[google]',
+      '[yahoo]',
+      '[bing]',
+      '[yp]',
+      '[foursquare]',
+      '[urbanspoon]',
+      '[ta]',
+    ),
+    $replace = array(
+      variable_get('worx_social_review_google_link', 'Error: No link. Please contact site administrator.'),
+      variable_get('worx_social_review_yahoo_link', 'Error: No link. Please contact site administrator.'),
+      variable_get('worx_social_review_bing_link', 'Error: No link. Please contact site administrator.'),
+      variable_get('worx_social_review_yp_link', 'Error: No link. Please contact site administrator.'),
+      variable_get('worx_social_review_foursquare_link', 'Error: No link. Please contact site administrator.'),
+      variable_get('worx_social_review_urban_spoon_link', 'Error: No link. Please contact site administrator.'),
+      variable_get('worx_social_review_ta_link', 'Error: No link. Please contact site administrator.'),
+    ),
+    $subject = $params['body']
+  );
+  $subject = $form_state['values']['email_subject'];
+  $message = array(
+    'key' => 'worx_social_review',
+    'to' => $to,
+    'from' => $from,
+    'subject' => $subject,
+    'body' => $body,
+    'headers' => array(
+      'From' => $from,
+      'Sender' => $from,
+      'Return-Path' => $from,
+    ),
+  );
+  $message = mimemail_prepare_message($message);
+  mimemail_mailengine('send', $message);
   drupal_set_message('Email successfully sent to ' . $form_state['values']['email_to']);
 }

@@ -3,3 +3,6 @@ description = This module allows site operators to easily request a local search
 core = 7.x
 package = Worx Components
 version = 7.x-1.3
+
+;Dependencies
+dependencies[] = mimemail
