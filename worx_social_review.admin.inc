@@ -63,6 +63,20 @@ function worx_social_review_settings_form() {
     '#required' => FALSE,
     '#description' => t("Please enter the link for Trip Advisor's review."),
   );
+   $form['worx_social_review_bulk_subject'] = array(
+    '#type' => 'textfield',
+    '#title' => t("Bulk Email Subject"),
+    '#default_value' => variable_get('worx_social_review_bulk_subject', ''),
+    '#required' => FALSE,
+    '#description' => t("Please enter a subject line to use with Bulk sent emails."),
+  );
+  $form['worx_social_review_default_sender'] = array(
+    '#type' => 'textfield',
+    '#title' => t("Default Sender"),
+    '#default_value' => variable_get('worx_social_review_default_sender', ''),
+    '#required' => FALSE,
+    '#description' => t("Please enter a default email address for bulk emails to be sent from."),
+  );
   
   return system_settings_form($form);
 }
