@@ -1,0 +1,60 @@
+<?php
+
+/**
+ * Implements hook_schema().
+ */
+function worx_social_review_schema() {
+  $schema['worx_social_review_queue'] = array(
+    'description' => 'Holds the queue of emails to go out on cron run',
+    'fields' => array(
+      'rsid' => array(
+        'description' => 'Review Submission ID',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'email' => array(
+        'description' => 'Email address of recipient',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+    ),
+    'primary key' => array('rsid'),
+  );
+
+  return $schema;
+}
+
+/**
+ * Create the worx_social_review_schema table on systems where the module is
+ * already installed.
+ */
+function worx_social_review_update_7000(&$sandbox) {
+  // Define the table structure
+  $schema['worx_social_review_queue'] = array(
+    'description' => 'Holds the queue of emails to go out on cron run',
+    'fields' => array(
+      'rsid' => array(
+        'description' => 'Review Submission ID',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'email' => array(
+        'description' => 'Email address of recipient',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+    ),
+    'primary key' => array('rsid'),
+  );
+
+  // Now create the table in the DB.
+  db_create_table('worx_social_review_queue', $schema);
+
+  return t('The worx_social_review_queue table was created successfully');
+}

@@ -66,6 +66,16 @@ function worx_social_review_menu() {
     'file path' => drupal_get_path('module', 'worx_social_review'),
     'type' => MENU_LOCAL_TASK,
   );
-  
+  $items['admin/social_review/email/bulk'] = array(
+    'title' => 'Social Review Bulk Email',
+    'description' => 'Queue up email address to bulk send on cron runs',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('worx_social_review_email_bulk_form'),
+    'access arguments' => array('social review email'),
+    'file' => 'worx_social_review_email_bulk_form.inc',
+    'file path' => drupal_get_path('module', 'worx_social_review'),
+    'type' => MENU_LOCAL_TASK,
+  );
+
   return $items;
 }
