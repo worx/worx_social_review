@@ -12,7 +12,7 @@ function worx_social_review_permission() {
   );
 }
 
-/** 
+/**
  * implements hook_menu().
  */
 function worx_social_review_menu() {
@@ -85,7 +85,7 @@ function worx_social_review_menu() {
  */
 function worx_social_review_cron() {
   $i = 0;
-  while ($i < 10) {
+  while ($i < 25) {
     $record = db_select('worx_social_review_queue', 'q')
       ->fields('q')
       ->range(0, 1);
@@ -94,7 +94,7 @@ function worx_social_review_cron() {
 
     while ($result = $results->fetchAssoc()) {
       $email = $result['email'];
-      $rsid = $result['resid'];
+      $rsid = $result['rsid'];
 
       $sent = worx_social_review_bulk_send($email);
 
@@ -111,7 +111,8 @@ function worx_social_review_cron() {
 
 function worx_social_review_bulk_send($email) {
   $params = array();
-  $params['body'] = variable_get('email_body', '');
+  $body_var = variable_get('email_body', '');
+  $params['body'] = $body_var['value'];
   $from = variable_get('worx_social_review_default_sender', '');
   $to = $email;
   $body = str_replace(
