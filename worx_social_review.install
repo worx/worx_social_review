@@ -33,7 +33,7 @@ function worx_social_review_schema() {
  */
 function worx_social_review_update_7000(&$sandbox) {
   // Define the table structure
-  $schema['worx_social_review_queue'] = array(
+  $schema = array(
     'description' => 'Holds the queue of emails to go out on cron run',
     'fields' => array(
       'rsid' => array(
