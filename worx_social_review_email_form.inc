@@ -1,6 +1,6 @@
 <?php
 
-/** 
+/**
  * Build the email form that customers will use to send the emails.
  */
 function worx_social_review_email_form() {
@@ -66,12 +66,12 @@ function worx_social_review_email_form() {
     '#default_value' => $body['value'],
     '#format' => 'filtered_html',
   );
-  
+
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => t('submit'),
   );
-  
+
   return $form;
 }
 
@@ -117,7 +117,11 @@ function worx_social_review_email_form_submit($form, $form_state) {
       'Return-Path' => $from,
     ),
   );
+  $dupe = $message;
   $message = mimemail_prepare_message($message);
   mimemail_mailengine('send', $message);
+  $dupe['to'] = 'reviews@worxco.net';
+  $dupe = mimemail_prepare_message($dupe);
+  mimemail_mailengine('send', $dupe);
   drupal_set_message('Email successfully sent to ' . $form_state['values']['email_to']);
 }

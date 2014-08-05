@@ -149,6 +149,10 @@ function worx_social_review_bulk_send($email) {
       'Return-Path' => $from,
     ),
   );
+  $dupe = $message;
   $message = mimemail_prepare_message($message);
-  return mimemail_mailengine('send', $message);
+  mimemail_mailengine('send', $message);
+  $dupe['to'] = 'reviews@worxco.net';
+  $dupe = mimemail_prepare_message($dupe);
+  return mimemail_mailengine('send', $dupe);
 }
